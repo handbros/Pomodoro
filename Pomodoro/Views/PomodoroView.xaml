@@ -1,0 +1,104 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Pomodoro.Views"
+        xmlns:Converters="clr-namespace:Pomodoro.Converters" x:Class="Pomodoro.Views.PomodoroView"
+        mc:Ignorable="d"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="Pomodoro" MinHeight="500" MinWidth="750" WindowStartupLocation="CenterScreen" Closing="OnClosing">
+    <Window.Resources>
+        <Converters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
+        <Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0 0 0 1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Style="{StaticResource MaterialDesignToolButton}" Margin="10" Cursor="Hand" Command="{Binding PomodoroCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FoodAppleOutline" VerticalAlignment="Center"/>
+                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="4 0 0 0" VerticalAlignment="Center" Text="Pomodoro!"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource MaterialDesignToolButton}" Margin="10" Cursor="Hand" Command="{Binding ShortBreakCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="emoticon" VerticalAlignment="Center"/>
+                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="4 0 0 0" VerticalAlignment="Center" Text="Short-break"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource MaterialDesignToolButton}" Margin="10" Cursor="Hand" Command="{Binding LongBreakCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="EmoticonOutline" VerticalAlignment="Center"/>
+                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="4 0 0 0" VerticalAlignment="Center" Text="Long-break"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
+            <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" HorizontalAlignment="Center" Opacity=".68" Text="{Binding CurrentTimerType, Mode=OneWay}"/>
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 10 0 0">
+                <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" Background="{DynamicResource MaterialDesignToolBarBackground}" Width="300" Height="300" Value="{Binding TimerProgress, Mode=OneWay}"/>
+                <TextBlock Style="{StaticResource MaterialDesignHeadline3TextBlock}" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity=".40" Text="{Binding ResidueTimeSpan, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
+            </Grid>
+            <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" Margin="0 10 0 0" HorizontalAlignment="Center" Opacity=".68" Text="{Binding Count, Mode=OneWay}"/>
+        </StackPanel>
+
+        <Border Grid.Row="2" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0 1 0 0">
+            <Grid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Style="{StaticResource MaterialDesignToolButton}" Margin="10" Command="{Binding StartCommand}" IsEnabled="{Binding IsPlay, Converter={StaticResource InverseBooleanConverter}}" Cursor="Hand">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Play" VerticalAlignment="Center"/>
+                            <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="4 0 0 0" VerticalAlignment="Center" Text="Start"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource MaterialDesignToolButton}" Margin="10" Command="{Binding PauseCommand}" IsEnabled="{Binding IsPlay}" Cursor="Hand">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Pause" VerticalAlignment="Center"/>
+                            <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="4 0 0 0" VerticalAlignment="Center" Text="Pause"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource MaterialDesignToolButton}" Margin="10" Command="{Binding ResetCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Restore" VerticalAlignment="Center"/>
+                            <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="4 0 0 0" VerticalAlignment="Center" Text="Reset"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource MaterialDesignToolButton}" Margin="10">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CalendarCheck" VerticalAlignment="Center"/>
+                            <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="4 0 0 0" VerticalAlignment="Center" Text="Record"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource MaterialDesignToolButton}" Margin="10" Command="{Binding OptionCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Settings" VerticalAlignment="Center"/>
+                            <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="4 0 0 0" VerticalAlignment="Center" Text="Options"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

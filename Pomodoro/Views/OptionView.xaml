@@ -1,0 +1,96 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Pomodoro.Views"
+        xmlns:Converters="clr-namespace:Pomodoro.Converters" x:Class="Pomodoro.Views.OptionView"
+        mc:Ignorable="d"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="Options" Height="500" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
+    <Window.Resources>
+        <Converters:InverseNullableBooleanConverter x:Key="InverseNullableBooleanConverter"/>
+        <Converters:DateTimeAndTimeSpanConverter x:Key="DateTimeAndTimeSpanConverter"/>
+    </Window.Resources>
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Orientation="Vertical" Margin="20">
+                <!--General Settings-->
+                <TextBlock Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Text="General"/>
+                <StackPanel Orientation="Vertical" Margin="0 6 0 0">
+                    <CheckBox Style="{StaticResource MaterialDesignCheckBox}" Content="Switch timer automatically." IsChecked="{Binding IsAutomatic, Mode=TwoWay}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0 4 0 0">
+                        <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Content="Short-break" IsEnabled="{Binding IsAutomatic, Mode=OneWay}" IsChecked="{Binding IsAutomaticUseLongBreak, Converter={StaticResource InverseNullableBooleanConverter}, Mode=TwoWay}"/>
+                        <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Margin="10 0 0 0" Content="Long-break" IsEnabled="{Binding IsAutomatic, Mode=OneWay}" IsChecked="{Binding IsAutomaticUseLongBreak, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <CheckBox Style="{StaticResource MaterialDesignCheckBox}" Margin="0 20 0 0" Content="Notify me when the timer has done." IsChecked="{Binding IsNotify, Mode=TwoWay}"/>
+                </StackPanel>
+
+                <!--Theme Settings-->
+                <TextBlock Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0 40 0 0" Text="Theme"/>
+                <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
+                    <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Width="180" Text="Use dark theme" Opacity=".68"/>
+                    <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" Margin="8 0 0 0" IsChecked="{Binding IsDarkTheme, Mode=TwoWay}"/>
+                </StackPanel>
+                <TextBlock Style="{StaticResource MaterialDesignCaptionTextBlock}" Margin="0 4 0 0" Text="※The changed theme will take effect after the application restarts."/>
+
+                <!--Timer Settings-->
+                <TextBlock Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0 40 0 0" Text="Timer"/>
+                <StackPanel Orientation="Vertical" Margin="0 6 0 0" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Width="180" Text="Pomodoro timer duration" Opacity=".68"/>
+                        <materialDesign:TimePicker materialDesign:HintAssist.Hint="Pomodoro" Is24Hours="True" WithSeconds="True" Margin="8 0 0 0" Width="100"
+                                                   SelectedTime="{Binding Pomodoro, Converter={StaticResource DateTimeAndTimeSpanConverter}, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Width="180" Text="Short-break timer duration" Opacity=".68"/>
+                        <materialDesign:TimePicker materialDesign:HintAssist.Hint="Short-break" Is24Hours="True" WithSeconds="True" Margin="8 0 0 0" Width="100"
+                                                   SelectedTime="{Binding ShortBreak, Converter={StaticResource DateTimeAndTimeSpanConverter}, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Width="180" Text="Long-break timer duration" Opacity=".68"/>
+                        <materialDesign:TimePicker materialDesign:HintAssist.Hint="Long-break" Is24Hours="True" WithSeconds="True" Margin="8 0 0 0" Width="100"
+                                                   SelectedTime="{Binding LongBreak, Converter={StaticResource DateTimeAndTimeSpanConverter}, Mode=TwoWay}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!--Alarm Settings-->
+                <TextBlock Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0 40 0 0" Text="Alarm"/>
+                <StackPanel Orientation="Vertical" Margin="0 6 0 0" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Width="180" Text="Enable alarm" Opacity=".68"/>
+                        <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" Margin="8 0 0 0" IsChecked="{Binding IsUseAlarm, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Width="180" Text="Alarm song file path" Opacity=".68"/>
+                        <TextBox materialDesign:HintAssist.Hint="Path" Margin="8 0 0 0" Width="300" IsEnabled="{Binding IsUseAlarm, Mode=OneWay}" Text="{Binding AlarmSongPath, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Width="180" Text="Alarm song sound volume" Opacity=".68"/>
+                        <Slider TickFrequency="5" Orientation="Horizontal" TickPlacement="BottomRight" Minimum="1" Maximum="100" IsEnabled="{Binding IsUseAlarm, Mode=OneWay}" Value="{Binding AlarmSongVolume, Mode=TwoWay}" IsSelectionRangeEnabled="True" Margin="8 0 0 0" Width="300"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Width="180" Text="Alarm duration" Opacity=".68"/>
+                        <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" materialDesign:TextFieldAssist.HasClearButton="True" materialDesign:TextFieldAssist.SuffixText="ms" Margin="8 0 0 0" Width="300"
+                                 IsEnabled="{Binding IsUseAlarm, Mode=OneWay}" Text="{Binding AlarmDuration, Mode=TwoWay}" PreviewTextInput="NumberTextInput">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Orientation="Horizontal" Margin="-2 0 0 0">
+                                    <materialDesign:PackIcon Kind="Pulse" />
+                                    <TextBlock Text="Duration"/>
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+                        </TextBox>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>
