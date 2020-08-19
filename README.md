@@ -1,2 +1,5 @@
 # Pomodoro
-A powerful pomodoro timer!
+
+## TODO
+Sound alarm supports.
+Record function supports.
