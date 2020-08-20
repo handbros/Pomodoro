@@ -2,11 +2,37 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pomodoro.Views"
         mc:Ignorable="d"
-        Title="RecordView" Height="450" Width="800">
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignBackground}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="Records" Height="600" Width="900" WindowStartupLocation="CenterScreen">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0 0 0 1">
+            <Grid>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="30 0 0 0" VerticalAlignment="Center" Text="Records of Pomodoro" Opacity=".68"/>
+                    <DatePicker Style="{StaticResource MaterialDesignFilledDatePicker}" VerticalAlignment="Center" materialDesign:HintAssist.Hint="Pick Date" Margin="20 10 10 10" Width="300" SelectedDate="{Binding PickedDate, Mode=TwoWay, StringFormat=\{0:D\}}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" Background="{DynamicResource MaterialDesignPaper}">
+            <DataGrid ItemsSource="{Binding EventDatas, Mode=OneWay}"  CanUserAddRows="False" AutoGenerateColumns="True" HeadersVisibility="All">
+                
+            </DataGrid>
+        </Grid>
     </Grid>
 </Window>

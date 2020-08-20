@@ -1,6 +1,8 @@
 ﻿using NAudio.Wave;
 using Newtonsoft.Json;
 using Pomodoro.Commands;
+using Pomodoro.Entities;
+using Pomodoro.Models;
 using Pomodoro.Utilities;
 using Pomodoro.Views;
 using System;
@@ -17,23 +19,17 @@ namespace Pomodoro.ViewModels
 {
     public class PomodoroViewModel : INotifyPropertyChanged
     {
-        #region ::Enums::
-
-        public enum TimerType
-        {
-            None,
-            Pomodoro,
-            ShortBreak,
-            LongBreak
-        }
-
-        #endregion
-
         #region ::Fields::
 
         private Settings _settings;
 
+        private Records _records;
+
         private Timer _timer;
+
+        private readonly Stopwatch _stopwatch;
+
+        private DateTime _startTime;
 
         #endregion
 
@@ -123,12 +119,42 @@ namespace Pomodoro.ViewModels
             // Initialize settings.
             _settings = Settings.GetInstance();
 
+            // Initialize records.
+            _records = Records.GetInstance();
+
+            if (_records.RecordEvents == null)
+                _records.RecordEvents = new Dictionary<DateTime, List<RecordEvent>>();
+
             // Initialize timer.
             _timer = new Timer(1000);
             _timer.Enabled = true;
             _timer.Stop();
-
             _timer.Elapsed += OnTimerElapsed; // Add timer elapsed event subscriber.
+
+            // Initialize stopwatch.
+            _stopwatch = new Stopwatch();
+        }
+
+        #endregion
+
+        #region ::Recording-Related::
+
+        private void AddRecord()
+        {
+            _stopwatch.Stop();
+
+            List<RecordEvent> recordEventList = new List<RecordEvent>();
+            RecordEvent record = new RecordEvent(CurrentTimerType, _startTime, DateTime.Now, _stopwatch.Elapsed);
+            recordEventList.Add(record);
+
+            if (_records.RecordEvents.ContainsKey(DateTime.Today))
+            {
+                _records.RecordEvents[DateTime.Today].Add(record);
+            }
+            else
+            {
+                _records.RecordEvents.Add(DateTime.Today, recordEventList);
+            }
         }
 
         #endregion
@@ -142,7 +168,14 @@ namespace Pomodoro.ViewModels
             {
                 if (IsPlay)
                 {
-                    Reset();
+                    if (CurrentTimerType == TimerType.None)
+                    {
+                        Reset();
+                    }
+                    else
+                    {
+                        AddRecord();
+                    }
 
                     // Show balloon tip.
                     if (_settings.IsNotify)
@@ -152,28 +185,34 @@ namespace Pomodoro.ViewModels
                         PomodoroView.NotifyIcon.Visible = false;
                     }
 
+                    // Add pomodoro count.
                     if (CurrentTimerType == TimerType.Pomodoro)
                     {
                         Count++;
                     }
 
-                    // Check timer automatically and restart timer.
+                    // Check timer state automatically and restart timer.
                     if (_settings.IsAutomatic)
                     {
                         if (CurrentTimerType == TimerType.Pomodoro && _settings.IsAutomaticUseLongBreak)
                         {
+                            Reset();
                             LongBreak();
                         }
                         else if (CurrentTimerType == TimerType.Pomodoro && !_settings.IsAutomaticUseLongBreak)
                         {
+                            Reset();
                             ShortBreak();
                         }
                         else if (CurrentTimerType == TimerType.ShortBreak || CurrentTimerType == TimerType.LongBreak)
                         {
+                            Reset();
                             Pomodoro();
                         }
-
-                        Start();
+                    }
+                    else
+                    {
+                        Reset();
                     }
                 }
             }
@@ -204,18 +243,26 @@ namespace Pomodoro.ViewModels
         {
             IsPlay = true;
             _timer.Start();
+            
+            // Run stopwatch and initialize diagnostics information.
+            _stopwatch.Start();
+            _startTime = DateTime.Now;
         }
 
         private void Pause()
         {
             IsPlay = false;
             _timer.Stop();
+
+            _stopwatch.Stop();
         }
 
         private void Reset()
         {
             IsPlay = false;
             _timer.Stop();
+
+            _stopwatch.Reset();
 
             CurrentTimerType = TimerType.None;
 
@@ -224,6 +271,17 @@ namespace Pomodoro.ViewModels
 
             // Reset timer progress.
             TimerProgress = 0.0f;
+        }
+
+        private void Record()
+        {
+            Records.SetInstance(_records);
+
+            Window window = new RecordView();
+            if (window.ShowDialog() == true)
+            {
+                _records = Records.GetInstance();
+            }
         }
 
         private void Option()
@@ -244,6 +302,8 @@ namespace Pomodoro.ViewModels
 
             // Reset timer progress to 100 percent.
             TimerProgress = 99.999f;
+
+            Start();
         }
 
         private void ShortBreak()
@@ -253,6 +313,8 @@ namespace Pomodoro.ViewModels
 
             // Reset timer progress to 100 percent.
             TimerProgress = 99.999f;
+
+            Start();
         }
 
         private void LongBreak()
@@ -262,6 +324,8 @@ namespace Pomodoro.ViewModels
 
             // Reset timer progress to 100 percent.
             TimerProgress = 99.999f;
+
+            Start();
         }
 
         #endregion
@@ -307,6 +371,16 @@ namespace Pomodoro.ViewModels
             get
             {
                 return (_resetCommand) ?? (_resetCommand = new DelegateCommand(Reset));
+            }
+        }
+
+        private ICommand _recordCommand;
+
+        public ICommand RecordCommand
+        {
+            get
+            {
+                return (_recordCommand) ?? (_recordCommand = new DelegateCommand(Record));
             }
         }
 

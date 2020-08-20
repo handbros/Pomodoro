@@ -1,6 +1,7 @@
 ﻿using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
 using Newtonsoft.Json;
+using Pomodoro.Models;
 using Pomodoro.Utilities;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace Pomodoro
         {
             base.OnStartup(e);
             InitializeSettings();
+            InitializeRecords();
             InitializeTheme();
         }
 
@@ -50,6 +52,18 @@ namespace Pomodoro
                 settings.AlarmSongVolume = 100.0f;
                 settings.AlarmDuration = 5000;
                 Settings.SetInstance(settings);
+            }
+        }
+
+        private void InitializeRecords()
+        {
+            Records records;
+            // Initialize records.
+            if (File.Exists(Settings.RECORDS_JSON)) // if 'records.json' exists.
+            {
+                string json = FileUtility.ReadFile(Settings.RECORDS_JSON, Encoding.UTF8);
+                records = JsonConvert.DeserializeObject<Records>(json);
+                Records.SetInstance(records);
             }
         }
 

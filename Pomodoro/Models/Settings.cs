@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pomodoro
+namespace Pomodoro.Models
 {
     public class Settings
     {
@@ -34,6 +34,8 @@ namespace Pomodoro
         #region ::Consts::
 
         public const string SETTINGS_JSON = @".\settings.json";
+
+        public const string RECORDS_JSON = @".\records.json";
 
         public const int DEFAULT_POMODORO = 25;
 

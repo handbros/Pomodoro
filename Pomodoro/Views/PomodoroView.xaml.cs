@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Pomodoro.Models;
 using Pomodoro.Utilities;
 using Pomodoro.ViewModels;
 using System;
@@ -61,9 +62,15 @@ namespace Pomodoro.Views
             }
             else
             {
+                // Save settings.
                 Settings settings = Settings.GetInstance();
-                string json = JsonConvert.SerializeObject(settings);
-                FileUtility.WriteFile(Settings.SETTINGS_JSON, json, Encoding.UTF8);
+                string settingsJson = JsonConvert.SerializeObject(settings);
+                FileUtility.WriteFile(Settings.SETTINGS_JSON, settingsJson, Encoding.UTF8);
+
+                // Save records.
+                Records records = Records.GetInstance();
+                string recordsJson = JsonConvert.SerializeObject(records);
+                FileUtility.WriteFile(Settings.RECORDS_JSON, recordsJson, Encoding.UTF8);
             }
         }
     }
