@@ -30,7 +30,7 @@
         </Border>
 
         <Grid Grid.Row="1" Background="{DynamicResource MaterialDesignPaper}">
-            <DataGrid ItemsSource="{Binding EventDatas, Mode=OneWay}"  CanUserAddRows="False" AutoGenerateColumns="True" HeadersVisibility="All">
+            <DataGrid ItemsSource="{Binding EventDatas, Mode=OneWay}"  CanUserAddRows="False" AutoGenerateColumns="True" HeadersVisibility="All" CanUserReorderColumns="False" IsReadOnly="True">
                 
             </DataGrid>
         </Grid>

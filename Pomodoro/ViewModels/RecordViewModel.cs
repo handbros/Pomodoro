@@ -1,13 +1,8 @@
 ﻿using Pomodoro.Entities;
 using Pomodoro.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pomodoro.ViewModels
 {
@@ -76,6 +71,7 @@ namespace Pomodoro.ViewModels
             {
                 foreach (RecordEvent record in _records.RecordEvents[date])
                 {
+                    record.TimeSpan.Subtract(new TimeSpan(0, 0, 1));
                     EventDatas.Add(record);
                 }
             }

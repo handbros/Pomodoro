@@ -1,10 +1,10 @@
-﻿using Pomodoro.Models;
+﻿using Microsoft.Win32;
+using Pomodoro.Commands;
+using Pomodoro.Models;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Windows.Input;
 
 namespace Pomodoro.ViewModels
 {
@@ -168,6 +168,41 @@ namespace Pomodoro.ViewModels
         public OptionViewModel()
         {
             _settings = Settings.GetInstance();
+        }
+
+        #endregion
+
+        #region ::Methods::
+
+        private void Browse()
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+
+            dialog.Title = "Selects a audio file...";
+            dialog.Filter = "Audio Files|*.aac;*.aif;*.aiff;*.aifc;*.caf;*.mp3;*.m4a;*.wav;*.wma;*.mp4";
+            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            if (dialog.ShowDialog() == true)
+            {
+                if (File.Exists(dialog.FileName))
+                {
+                    AlarmSongPath = dialog.FileName;
+                }
+            }
+        }
+
+        #endregion
+
+        #region ::Commands::
+
+        private ICommand _browseCommand;
+
+        public ICommand BrowseCommand
+        {
+            get
+            {
+                return (_browseCommand) ?? (_browseCommand = new DelegateCommand(Browse));
+            }
         }
 
         #endregion

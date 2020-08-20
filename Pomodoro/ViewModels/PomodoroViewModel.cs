@@ -3,14 +3,11 @@ using Newtonsoft.Json;
 using Pomodoro.Commands;
 using Pomodoro.Entities;
 using Pomodoro.Models;
-using Pomodoro.Utilities;
 using Pomodoro.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -168,6 +165,7 @@ namespace Pomodoro.ViewModels
             {
                 if (IsPlay)
                 {
+                    // If the remaining time is 0 seconds, and the timer type is None.
                     if (CurrentTimerType == TimerType.None)
                     {
                         Reset();

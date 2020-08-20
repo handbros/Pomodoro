@@ -72,6 +72,7 @@
                     <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
                         <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Width="180" Text="Alarm song file path" Opacity=".68"/>
                         <TextBox materialDesign:HintAssist.Hint="Path" Margin="8 0 0 0" Width="300" IsEnabled="{Binding IsUseAlarm, Mode=OneWay}" Text="{Binding AlarmSongPath, Mode=TwoWay}"/>
+                        <Button Style="{StaticResource MaterialDesignOutlinedButton}" Margin="10 0 0 0" IsEnabled="{Binding IsUseAlarm, Mode=OneWay}" Command="{Binding BrowseCommand}">...</Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
                         <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Width="180" Text="Alarm song sound volume" Opacity=".68"/>
