@@ -36,6 +36,7 @@ namespace Pomodoro
             }
             else
             {
+                // Set to default settings.
                 settings = new Settings();
                 settings.IsDarkTheme = false;
                 settings.IsAutomatic = false;
@@ -45,7 +46,6 @@ namespace Pomodoro
                 settings.LongBreak = new TimeSpan(0, Settings.DEFAULT_LONG, 0);
                 settings.IsUseAlarm = false;
                 settings.AlarmSongVolume = 100.0f;
-                settings.AlarmDuration = 5000;
                 Settings.SetInstance(settings);
             }
         }

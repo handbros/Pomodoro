@@ -1,9 +1,12 @@
 ﻿using Microsoft.Win32;
+using NAudio.Wave;
 using Pomodoro.Commands;
 using Pomodoro.Models;
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Pomodoro.ViewModels
@@ -148,19 +151,6 @@ namespace Pomodoro.ViewModels
             }
         }
 
-        public int AlarmDuration
-        {
-            get
-            {
-                return _settings.AlarmDuration;
-            }
-            set
-            {
-                _settings.AlarmDuration = value;
-                RaisePropertyChanged("AlarmDuration");
-            }
-        }
-
         #endregion
 
         #region ::Constructor::
@@ -174,11 +164,12 @@ namespace Pomodoro.ViewModels
 
         #region ::Methods::
 
-        private void Browse()
+        private void AlarmBrowse()
         {
             OpenFileDialog dialog = new OpenFileDialog();
 
             dialog.Title = "Selects a audio file...";
+            
             dialog.Filter = "Audio Files|*.aac;*.aif;*.aiff;*.aifc;*.caf;*.mp3;*.m4a;*.wav;*.wma;*.mp4";
             dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
@@ -191,17 +182,62 @@ namespace Pomodoro.ViewModels
             }
         }
 
+        private void AlarmTest()
+        {
+            // Check null reference.
+            if (_settings.AlarmSongPath == null)
+            {
+                MessageBox.Show("Please specify the audio file to be used for the alarm.", "Pomodoro", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
+            // Check audio file.
+            if (!File.Exists(_settings.AlarmSongPath))
+            {
+                MessageBox.Show("The audio file does not exist.", "Pomodoro", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
+            // Play audio file in a new thread.
+            Thread alarm = new Thread(() =>
+            {
+                using (var audioFile = new AudioFileReader(_settings.AlarmSongPath))
+                using (var outputDevice = new WaveOutEvent())
+                {
+                    outputDevice.Init(audioFile);
+                    outputDevice.Volume = (float)_settings.AlarmSongVolume / 100f;
+                    outputDevice.Play();
+                    while (outputDevice.PlaybackState == PlaybackState.Playing)
+                    {
+                        Thread.Sleep(1000);
+                    }
+                }
+            });
+
+            alarm.Start();
+        }
+
         #endregion
 
         #region ::Commands::
 
-        private ICommand _browseCommand;
+        private ICommand _alarmBrowseCommand;
 
-        public ICommand BrowseCommand
+        public ICommand AlarmBrowseCommand
         {
             get
             {
-                return (_browseCommand) ?? (_browseCommand = new DelegateCommand(Browse));
+                return (_alarmBrowseCommand) ?? (_alarmBrowseCommand = new DelegateCommand(AlarmBrowse));
+            }
+        }
+
+        private ICommand _alarmTestCommand;
+
+        public ICommand AlarmTestCommand
+        {
+            get
+            {
+                return (_alarmTestCommand) ?? (_alarmTestCommand = new DelegateCommand(AlarmTest));
             }
         }
 

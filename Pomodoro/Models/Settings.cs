@@ -62,8 +62,6 @@ namespace Pomodoro.Models
 
         public double AlarmSongVolume { get; set; }
 
-        public int AlarmDuration { get; set; } // Unit : milliseconds
-
         #endregion
     }
 }

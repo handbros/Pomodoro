@@ -72,23 +72,15 @@
                     <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
                         <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Width="180" Text="Alarm song file path" Opacity=".68"/>
                         <TextBox materialDesign:HintAssist.Hint="Path" Margin="8 0 0 0" Width="300" IsEnabled="{Binding IsUseAlarm, Mode=OneWay}" Text="{Binding AlarmSongPath, Mode=TwoWay}"/>
-                        <Button Style="{StaticResource MaterialDesignOutlinedButton}" Margin="10 0 0 0" IsEnabled="{Binding IsUseAlarm, Mode=OneWay}" Command="{Binding BrowseCommand}">...</Button>
+                        <Button Style="{StaticResource MaterialDesignOutlinedButton}" Margin="10 0 0 0" Width="50" IsEnabled="{Binding IsUseAlarm, Mode=OneWay}" Command="{Binding AlarmBrowseCommand}">...</Button>
+                        <Button Style="{StaticResource MaterialDesignOutlinedButton}" Margin="6 0 0 0" Width="50" IsEnabled="{Binding IsUseAlarm, Mode=OneWay}" Command="{Binding AlarmTestCommand}">
+                            <materialDesign:PackIcon Kind="Music" />
+                        </Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
                         <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Width="180" Text="Alarm song sound volume" Opacity=".68"/>
                         <Slider TickFrequency="5" Orientation="Horizontal" TickPlacement="BottomRight" Minimum="1" Maximum="100" IsEnabled="{Binding IsUseAlarm, Mode=OneWay}" Value="{Binding AlarmSongVolume, Mode=TwoWay}" IsSelectionRangeEnabled="True" Margin="8 0 0 0" Width="300"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
-                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" VerticalAlignment="Center" Width="180" Text="Alarm duration" Opacity=".68"/>
-                        <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" materialDesign:TextFieldAssist.HasClearButton="True" materialDesign:TextFieldAssist.SuffixText="ms" Margin="8 0 0 0" Width="300"
-                                 IsEnabled="{Binding IsUseAlarm, Mode=OneWay}" Text="{Binding AlarmDuration, Mode=TwoWay}" PreviewTextInput="NumberTextInput">
-                            <materialDesign:HintAssist.Hint>
-                                <StackPanel Orientation="Horizontal" Margin="-2 0 0 0">
-                                    <materialDesign:PackIcon Kind="Pulse" />
-                                    <TextBlock Text="Duration"/>
-                                </StackPanel>
-                            </materialDesign:HintAssist.Hint>
-                        </TextBox>
+                        <TextBlock Style="{StaticResource MaterialDesignCaptionTextBlock}" Margin="10 0 0 0" Text="{Binding AlarmSongVolume, Mode=OneWay}"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

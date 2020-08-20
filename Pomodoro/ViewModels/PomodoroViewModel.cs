@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -24,9 +25,15 @@ namespace Pomodoro.ViewModels
 
         private Timer _timer;
 
-        private readonly Stopwatch _stopwatch;
+        private readonly Stopwatch _stopwatch; // Stopwatch for recording system.
 
-        private DateTime _startTime;
+        private DateTime _startTime; // recording start time.
+
+        private AudioFileReader _audioFile;
+
+        private WaveOutEvent _waveOut;
+
+        private bool _isAudioPlaying = false;
 
         #endregion
 
@@ -134,6 +141,47 @@ namespace Pomodoro.ViewModels
 
         #endregion
 
+        #region ::Alarm-Related::
+
+        private void StartAlarm()
+        {
+            if (!_isAudioPlaying)
+            {
+                if (File.Exists(_settings.AlarmSongPath))
+                {
+                    return;
+                }
+
+                // Initialize audio instances.
+                _waveOut = new WaveOutEvent();
+                _audioFile = new AudioFileReader(_settings.AlarmSongPath);
+
+                _waveOut.Init(_audioFile);
+                _waveOut.Volume = (float)_settings.AlarmSongVolume / 100f;
+
+                // Subscribe playback stopped event.
+                _waveOut.PlaybackStopped += (s, e) => StopAlarm();
+
+                _waveOut.Play();
+
+                _isAudioPlaying = true;
+            }
+        }
+
+        private void StopAlarm()
+        {
+            if (_isAudioPlaying)
+            {
+                _waveOut.Dispose();
+                _audioFile.Dispose();
+                _waveOut = null;
+
+                _isAudioPlaying = false;
+            }
+        }
+
+        #endregion
+
         #region ::Recording-Related::
 
         private void AddRecord()
@@ -169,6 +217,7 @@ namespace Pomodoro.ViewModels
                     if (CurrentTimerType == TimerType.None)
                     {
                         Reset();
+                        return;
                     }
                     else
                     {
@@ -181,6 +230,12 @@ namespace Pomodoro.ViewModels
                         PomodoroView.NotifyIcon.Visible = true;
                         PomodoroView.NotifyIcon.ShowBalloonTip(3000, "Pomodoro", "Now time's up!", System.Windows.Forms.ToolTipIcon.Info);
                         PomodoroView.NotifyIcon.Visible = false;
+                    }
+
+                    // Start alarm.
+                    if (_settings.IsUseAlarm)
+                    {
+                        StartAlarm();
                     }
 
                     // Add pomodoro count.
@@ -252,6 +307,7 @@ namespace Pomodoro.ViewModels
             IsPlay = false;
             _timer.Stop();
 
+            // Stops the stopwatch for accurate diagnostics.
             _stopwatch.Stop();
         }
 
@@ -260,6 +316,7 @@ namespace Pomodoro.ViewModels
             IsPlay = false;
             _timer.Stop();
 
+            // Reset stopwatch.
             _stopwatch.Reset();
 
             CurrentTimerType = TimerType.None;
