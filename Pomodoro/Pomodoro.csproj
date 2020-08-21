@@ -76,6 +76,7 @@
     <Compile Include="Converters\DateTimeAndTimeSpanConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\InverseNullableBooleanConverter.cs" />
+    <Compile Include="Converters\TimeSpanToBrushConverter.cs" />
     <Compile Include="Converters\TimeSpanToStringConverter.cs" />
     <Compile Include="Entities\RecordEvent.cs" />
     <Compile Include="Entities\TimerType.cs" />

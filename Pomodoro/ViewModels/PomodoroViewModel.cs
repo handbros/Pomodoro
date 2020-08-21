@@ -1,13 +1,16 @@
 ﻿using NAudio.Wave;
+using Newtonsoft.Json;
 using Pomodoro.Commands;
 using Pomodoro.Entities;
 using Pomodoro.Models;
+using Pomodoro.Utilities;
 using Pomodoro.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -221,6 +224,10 @@ namespace Pomodoro.ViewModels
                     else
                     {
                         AddRecord();
+
+                        // Save records.
+                        string recordsJson = JsonConvert.SerializeObject(Records.Instance);
+                        FileUtility.WriteFile(Settings.RECORDS_JSON, recordsJson, Encoding.UTF8);
                     }
 
                     // Show balloon tip.
