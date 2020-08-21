@@ -1,5 +1,4 @@
 ﻿using NAudio.Wave;
-using Newtonsoft.Json;
 using Pomodoro.Commands;
 using Pomodoro.Entities;
 using Pomodoro.Models;
