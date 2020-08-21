@@ -12,18 +12,19 @@ namespace Pomodoro.Models
         [NonSerialized]
         private static Records _instance;
 
-        public static Records GetInstance()
+        public static Records Instance
         {
+            get
+            {
+                if (_instance == null)
+                    _instance = new Records();
 
-            if (_instance == null)
-                _instance = new Records();
-
-            return _instance;
-        }
-
-        public static void SetInstance(Records records)
-        {
-            _instance = records;
+                return _instance;
+            }
+            set
+            {
+                _instance = value;
+            }
         }
 
         #endregion

@@ -53,13 +53,11 @@ namespace Pomodoro.Views
             else
             {
                 // Save settings.
-                Settings settings = Settings.GetInstance();
-                string settingsJson = JsonConvert.SerializeObject(settings);
+                string settingsJson = JsonConvert.SerializeObject(Settings.Instance);
                 FileUtility.WriteFile(Settings.SETTINGS_JSON, settingsJson, Encoding.UTF8);
 
                 // Save records.
-                Records records = Records.GetInstance();
-                string recordsJson = JsonConvert.SerializeObject(records);
+                string recordsJson = JsonConvert.SerializeObject(Records.Instance);
                 FileUtility.WriteFile(Settings.RECORDS_JSON, recordsJson, Encoding.UTF8);
             }
         }

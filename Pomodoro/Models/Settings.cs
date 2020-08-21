@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace Pomodoro.Models
 {
@@ -10,18 +11,19 @@ namespace Pomodoro.Models
         [NonSerialized]
         private static Settings _instance;
 
-        public static Settings GetInstance()
+        public static Settings Instance
         {
+            get
+            {
+                if (_instance == null)
+                    _instance = new Settings();
 
-            if (_instance == null)
-                _instance = new Settings();
-
-            return _instance;
-        }
-
-        public static void SetInstance(Settings settings)
-        {
-            _instance = settings;
+                return _instance;
+            }
+            set
+            {
+                _instance = value;
+            }
         }
 
         #endregion

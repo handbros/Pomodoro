@@ -31,6 +31,9 @@ namespace Pomodoro.ViewModels
             {
                 _settings.IsDarkTheme = value;
                 RaisePropertyChanged("IsDarkTheme");
+
+                // Initialize theme to show new theme.
+                App.InitializeTheme();
             }
         }
 
@@ -157,7 +160,7 @@ namespace Pomodoro.ViewModels
 
         public OptionViewModel()
         {
-            _settings = Settings.GetInstance();
+            _settings = Settings.Instance;
         }
 
         #endregion

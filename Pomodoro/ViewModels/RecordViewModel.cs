@@ -10,7 +10,7 @@ namespace Pomodoro.ViewModels
     {
         #region ::Fields::
 
-        private Records _records = Records.GetInstance();
+        private Records _records = Records.Instance;
 
         #endregion
 

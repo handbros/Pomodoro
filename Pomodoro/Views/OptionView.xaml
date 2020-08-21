@@ -14,7 +14,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Options" Height="500" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
+        Title="Options" Height="500" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" Closing="OnClosing">
     <Window.Resources>
         <Converters:InverseNullableBooleanConverter x:Key="InverseNullableBooleanConverter"/>
         <Converters:DateTimeAndTimeSpanConverter x:Key="DateTimeAndTimeSpanConverter"/>

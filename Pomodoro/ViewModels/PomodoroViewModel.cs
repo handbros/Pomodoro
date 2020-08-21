@@ -121,10 +121,10 @@ namespace Pomodoro.ViewModels
         public PomodoroViewModel()
         {
             // Initialize settings.
-            _settings = Settings.GetInstance();
+            _settings = Settings.Instance;
 
             // Initialize records.
-            _records = Records.GetInstance();
+            _records = Records.Instance;
 
             if (_records.RecordEvents == null)
                 _records.RecordEvents = new Dictionary<DateTime, List<RecordEvent>>();
@@ -147,7 +147,7 @@ namespace Pomodoro.ViewModels
         {
             if (!_isAudioPlaying)
             {
-                if (File.Exists(_settings.AlarmSongPath))
+                if (_settings.AlarmSongPath == null || !File.Exists(_settings.AlarmSongPath))
                 {
                     return;
                 }
@@ -330,24 +330,14 @@ namespace Pomodoro.ViewModels
 
         private void Record()
         {
-            Records.SetInstance(_records);
-
             Window window = new RecordView();
-            if (window.ShowDialog() == true)
-            {
-                _records = Records.GetInstance();
-            }
+            window.ShowDialog();
         }
 
         private void Option()
         {
-            Settings.SetInstance(_settings);
-
             Window window = new OptionView();
-            if (window.ShowDialog() == true)
-            {
-                _settings = Settings.GetInstance();
-            }
+            window.ShowDialog();
         }
 
         private void Pomodoro()

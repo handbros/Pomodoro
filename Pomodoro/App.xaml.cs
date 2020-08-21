@@ -6,6 +6,7 @@ using Pomodoro.Utilities;
 using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 
@@ -24,20 +25,18 @@ namespace Pomodoro
             InitializeTheme();
         }
 
-        private void InitializeSettings()
+        public static void InitializeSettings()
         {
-            Settings settings;
             // Initialize settings.
             if (File.Exists(Settings.SETTINGS_JSON)) // if 'settings.json' exists.
             {
                 string json = FileUtility.ReadFile(Settings.SETTINGS_JSON, Encoding.UTF8);
-                settings = JsonConvert.DeserializeObject<Settings>(json);
-                Settings.SetInstance(settings);
+                Settings.Instance = JsonConvert.DeserializeObject<Settings>(json);
             }
             else
             {
                 // Set to default settings.
-                settings = new Settings();
+                Settings settings = new Settings();
                 settings.IsDarkTheme = false;
                 settings.IsAutomatic = false;
                 settings.IsNotify = true;
@@ -46,23 +45,21 @@ namespace Pomodoro
                 settings.LongBreak = new TimeSpan(0, Settings.DEFAULT_LONG, 0);
                 settings.IsUseAlarm = false;
                 settings.AlarmSongVolume = 100.0f;
-                Settings.SetInstance(settings);
+                Settings.Instance = settings;
             }
         }
 
-        private void InitializeRecords()
+        public static void InitializeRecords()
         {
-            Records records;
             // Initialize records.
             if (File.Exists(Settings.RECORDS_JSON)) // if 'records.json' exists.
             {
                 string json = FileUtility.ReadFile(Settings.RECORDS_JSON, Encoding.UTF8);
-                records = JsonConvert.DeserializeObject<Records>(json);
-                Records.SetInstance(records);
+                Records.Instance = JsonConvert.DeserializeObject<Records>(json);
             }
         }
 
-        private void InitializeTheme()
+        public static void InitializeTheme()
         {
             var paletteHelper = new PaletteHelper();
 
@@ -70,7 +67,7 @@ namespace Pomodoro
             ITheme theme = paletteHelper.GetTheme();
 
             // Change theme.
-            if (Settings.GetInstance().IsDarkTheme)
+            if (Settings.Instance.IsDarkTheme)
             {
                 theme.SetBaseTheme(Theme.Dark);
             }
