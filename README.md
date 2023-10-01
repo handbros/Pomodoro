@@ -14,6 +14,4 @@ Everyone can use the source code in this repository freely, under the MIT Licens
  * Json.NET - MIT License [[View License]](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md)
 
 ## Contact
-if you have a question about the source code, please contact with me using GitHub Issues or email.
-
-※ Email - junimiso04@naver.com
+if you have a question about the source code, please contact with me using GitHub Issues.
